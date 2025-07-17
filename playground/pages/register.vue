@@ -1,8 +1,8 @@
 <template>
   <div class="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="card max-w-md w-full space-y-8 animate-slide-up">
+    <div class="bg-white/80 backdrop-blur-sm shadow-xl rounded-2xl p-8 border border-white/20 max-w-md w-full space-y-8 animate-slide-up">
       <div class="text-center">
-        <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+        <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
           <svg
             class="w-8 h-8 text-white"
             fill="none"
@@ -32,17 +32,32 @@
         <div>
           <label
             for="email"
-            class="form-label"
+            class="block text-sm font-semibold text-gray-700 mb-2"
           >
             Email Address
           </label>
           <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg
+                class="h-5 w-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
+                />
+              </svg>
+            </div>
             <input
               id="email"
               v-model="form.email"
               type="email"
               required
-              class="form-input pl-10"
+              class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white/50 backdrop-blur-sm"
               placeholder="your@email.com"
             >
           </div>
@@ -51,18 +66,33 @@
         <div>
           <label
             for="username"
-            class="form-label"
+            class="block text-sm font-semibold text-gray-700 mb-2"
           >
             Username
           </label>
           <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg
+                class="h-5 w-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
+              </svg>
+            </div>
             <input
               id="username"
               v-model="form.username"
               type="text"
               required
               minlength="3"
-              class="form-input pl-10"
+              class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white/50 backdrop-blur-sm"
               placeholder="Your username"
             >
           </div>
@@ -71,45 +101,148 @@
         <div>
           <label
             for="password"
-            class="form-label"
+            class="block text-sm font-semibold text-gray-700 mb-2"
           >
             Password
           </label>
           <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg
+                class="h-5 w-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
+              </svg>
+            </div>
             <input
               id="password"
               v-model="form.password"
               type="password"
               required
               minlength="6"
-              class="form-input pl-10"
+              class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white/50 backdrop-blur-sm"
               placeholder="Minimum 6 characters"
             >
+          </div>
+          <!-- Password strength indicator -->
+          <div
+            v-if="form.password"
+            class="mt-2"
+          >
+            <div class="flex items-center space-x-2">
+              <div class="flex-1 bg-gray-200 rounded-full h-2">
+                <div
+                  :class="passwordStrength.color"
+                  class="h-2 rounded-full transition-all duration-300"
+                  :style="{ width: `${(passwordStrength.score / 6) * 100}%` }"
+                />
+              </div>
+              <span
+                class="text-xs font-medium"
+                :class="{
+                  'text-red-600': passwordStrength.label === 'Weak',
+                  'text-yellow-600': passwordStrength.label === 'Medium',
+                  'text-green-600': passwordStrength.label === 'Strong'
+                }"
+              >
+                {{ passwordStrength.label }}
+              </span>
+            </div>
           </div>
         </div>
 
         <div>
           <label
             for="confirmPassword"
-            class="form-label"
+            class="block text-sm font-semibold text-gray-700 mb-2"
           >
             Confirm Password
           </label>
           <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg
+                class="h-5 w-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                />
+              </svg>
+            </div>
             <input
               id="confirmPassword"
               v-model="form.confirmPassword"
               type="password"
               required
-              class="form-input pl-10"
+              class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white/50 backdrop-blur-sm"
+              :class="{
+                'border-green-300 bg-green-50/50': form.confirmPassword && form.password === form.confirmPassword,
+                'border-red-300 bg-red-50/50': form.confirmPassword && form.password !== form.confirmPassword
+              }"
               placeholder="Confirm your password"
             >
+          </div>
+          <!-- Password match indicator -->
+          <div
+            v-if="form.confirmPassword"
+            class="mt-2"
+          >
+            <div
+              v-if="form.password === form.confirmPassword"
+              class="flex items-center space-x-1 text-green-600 text-xs"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+              <span>Passwords match</span>
+            </div>
+            <div
+              v-else
+              class="flex items-center space-x-1 text-red-600 text-xs"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+              <span>Passwords don't match</span>
+            </div>
           </div>
         </div>
 
         <div
           v-if="error"
-          class="alert-error flex items-center space-x-2"
+          class="bg-red-50 border-l-4 border-red-500 text-red-800 px-6 py-4 rounded-r-lg shadow-sm flex items-center space-x-2"
         >
           <svg
             class="w-5 h-5 flex-shrink-0"
@@ -129,7 +262,7 @@
 
         <div
           v-if="success"
-          class="alert-success flex items-center space-x-2"
+          class="bg-green-50 border-l-4 border-green-500 text-green-800 px-6 py-4 rounded-r-lg shadow-sm flex items-center space-x-2"
         >
           <svg
             class="w-5 h-5 flex-shrink-0"
@@ -151,7 +284,7 @@
           <button
             type="submit"
             :disabled="loading"
-            class="btn-success w-full relative"
+            class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 w-full relative"
           >
             <span
               v-if="loading"
@@ -189,7 +322,7 @@
           Already have an account?
           <NuxtLink
             to="/login"
-            class="font-medium text-primary-600 hover:text-primary-500 transition-colors duration-200"
+            class="font-medium text-green-600 hover:text-green-500 transition-colors duration-200"
           >
             Sign In
           </NuxtLink>
@@ -210,6 +343,24 @@ const form = ref({
 const loading = ref(false)
 const error = ref('')
 const success = ref('')
+
+// Password strength indicator
+const passwordStrength = computed(() => {
+  const password = form.value.password
+  if (!password) return { score: 0, label: '', color: '' }
+  
+  let score = 0
+  if (password.length >= 6) score += 1
+  if (password.length >= 8) score += 1
+  if (/[A-Z]/.test(password)) score += 1
+  if (/[a-z]/.test(password)) score += 1
+  if (/[0-9]/.test(password)) score += 1
+  if (/[^A-Za-z0-9]/.test(password)) score += 1
+  
+  if (score <= 2) return { score, label: 'Weak', color: 'bg-red-500' }
+  if (score <= 4) return { score, label: 'Medium', color: 'bg-yellow-500' }
+  return { score, label: 'Strong', color: 'bg-green-500' }
+})
 
 const handleRegister = async () => {
   if (loading.value) return

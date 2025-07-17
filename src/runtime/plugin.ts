@@ -102,7 +102,7 @@ export default defineNuxtPlugin(() => {
     },
 
     // Helper pour faire des requêtes authentifiées
-    async authenticatedFetch(url: string, options: { headers?: Record<string, string>; [key: string]: any } = {}) {
+    async authenticatedFetch(url: string, options: { headers?: Record<string, string>, [key: string]: unknown } = {}) {
       if (!accessToken.value) {
         throw new Error('No access token available')
       }

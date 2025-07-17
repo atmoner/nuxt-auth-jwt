@@ -149,7 +149,7 @@
                 :class="{
                   'text-red-600': passwordStrength.label === 'Weak',
                   'text-yellow-600': passwordStrength.label === 'Medium',
-                  'text-green-600': passwordStrength.label === 'Strong'
+                  'text-green-600': passwordStrength.label === 'Strong',
                 }"
               >
                 {{ passwordStrength.label }}
@@ -189,7 +189,7 @@
               class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white/50 backdrop-blur-sm"
               :class="{
                 'border-green-300 bg-green-50/50': form.confirmPassword && form.password === form.confirmPassword,
-                'border-red-300 bg-red-50/50': form.confirmPassword && form.password !== form.confirmPassword
+                'border-red-300 bg-red-50/50': form.confirmPassword && form.password !== form.confirmPassword,
               }"
               placeholder="Confirm your password"
             >
@@ -348,15 +348,15 @@ const success = ref('')
 const passwordStrength = computed(() => {
   const password = form.value.password
   if (!password) return { score: 0, label: '', color: '' }
-  
+
   let score = 0
   if (password.length >= 6) score += 1
   if (password.length >= 8) score += 1
   if (/[A-Z]/.test(password)) score += 1
   if (/[a-z]/.test(password)) score += 1
-  if (/[0-9]/.test(password)) score += 1
-  if (/[^A-Za-z0-9]/.test(password)) score += 1
-  
+  if (/\d/.test(password)) score += 1
+  if (/[^A-Z0-9]/i.test(password)) score += 1
+
   if (score <= 2) return { score, label: 'Weak', color: 'bg-red-500' }
   if (score <= 4) return { score, label: 'Medium', color: 'bg-yellow-500' }
   return { score, label: 'Strong', color: 'bg-green-500' }

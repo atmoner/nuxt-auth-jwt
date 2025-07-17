@@ -509,7 +509,7 @@ For detailed publishing instructions, see [PUBLISHING.md](PUBLISHING.md).
 - ✅ **Automated Publishing**: NPM publication on git tags
 - ✅ **GitHub Releases**: Automatic release creation
 
-## �📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 

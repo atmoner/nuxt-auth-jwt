@@ -35,7 +35,8 @@ export default defineNuxtPlugin(() => {
       return data
     },
 
-    async register(credentials: RegisterCredentials) {
+    async register(email: string, username: string, password: string) {
+      const credentials: RegisterCredentials = { email, username, password }
       const data = await $fetch<{ user: User, tokens: AuthTokens }>('/api/auth/register', {
         method: 'POST',
         body: credentials,
@@ -101,7 +102,7 @@ export default defineNuxtPlugin(() => {
     },
 
     // Helper pour faire des requêtes authentifiées
-    async authenticatedFetch(url: string, options: any = {}) {
+    async authenticatedFetch(url: string, options: { headers?: Record<string, string>; [key: string]: any } = {}) {
       if (!accessToken.value) {
         throw new Error('No access token available')
       }
@@ -110,14 +111,14 @@ export default defineNuxtPlugin(() => {
         return await $fetch(url, {
           ...options,
           headers: {
-            ...options.headers,
+            ...(options.headers || {}),
             Authorization: `Bearer ${accessToken.value}`,
           },
         })
       }
-      catch (error: any) {
+      catch (error: unknown) {
         // Si le token a expiré, essayer de le rafraîchir
-        if (error.status === 401 && refreshToken.value) {
+        if (error && typeof error === 'object' && 'status' in error && error.status === 401 && refreshToken.value) {
           try {
             await this.refreshTokens()
 
@@ -125,7 +126,7 @@ export default defineNuxtPlugin(() => {
             return await $fetch(url, {
               ...options,
               headers: {
-                ...options.headers,
+                ...(options.headers || {}),
                 Authorization: `Bearer ${accessToken.value}`,
               },
             })

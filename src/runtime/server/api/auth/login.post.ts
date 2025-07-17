@@ -1,7 +1,7 @@
 import { defineEventHandler, readBody, createError } from 'h3'
 import type { LoginCredentials, AuthResponse } from '../../../types/auth'
-import { UserService } from '../../services/user'
-import { AuthUtils } from '../../utils/auth'
+import { verifyCredentials, addRefreshToken } from '../../services/user'
+import { generateAccessToken, generateRefreshToken } from '../../utils/auth'
 
 export default defineEventHandler(async (event) => {
   if (event.method !== 'POST') {
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Vérifier les identifiants
-    const user = await UserService.verifyCredentials(body.email, body.password)
+    const user = await verifyCredentials(body.email, body.password)
     if (!user) {
       throw createError({
         statusCode: 401,
@@ -32,11 +32,11 @@ export default defineEventHandler(async (event) => {
     }
 
     // Générer les tokens
-    const accessToken = AuthUtils.generateAccessToken(user)
-    const refreshToken = AuthUtils.generateRefreshToken(user)
+    const accessToken = generateAccessToken(user)
+    const refreshToken = generateRefreshToken(user)
 
     // Stocker le refresh token
-    await UserService.addRefreshToken(refreshToken)
+    await addRefreshToken(refreshToken)
 
     const response: AuthResponse = {
       user,
@@ -48,8 +48,8 @@ export default defineEventHandler(async (event) => {
 
     return response
   }
-  catch (error: any) {
-    if (error.statusCode) {
+  catch (error: unknown) {
+    if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error
     }
 

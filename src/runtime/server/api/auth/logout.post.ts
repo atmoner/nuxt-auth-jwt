@@ -1,5 +1,5 @@
 import { defineEventHandler, readBody, createError } from 'h3'
-import { UserService } from '../../services/user'
+import { removeRefreshToken } from '../../services/user'
 
 export default defineEventHandler(async (event) => {
   if (event.method !== 'POST') {
@@ -20,12 +20,12 @@ export default defineEventHandler(async (event) => {
     }
 
     // Supprimer le refresh token du stockage
-    await UserService.removeRefreshToken(body.refreshToken)
+    await removeRefreshToken(body.refreshToken)
 
     return { message: 'Logged out successfully' }
   }
-  catch (error: any) {
-    if (error.statusCode) {
+  catch (error: unknown) {
+    if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error
     }
 

@@ -1,7 +1,7 @@
 import { defineEventHandler, readBody, createError } from 'h3'
 import type { AuthTokens } from '../../../types/auth'
-import { UserService } from '../../services/user'
-import { AuthUtils } from '../../utils/auth'
+import { isValidRefreshToken, findUserById, removeRefreshToken, addRefreshToken } from '../../services/user'
+import { verifyRefreshToken, generateAccessToken, generateRefreshToken } from '../../utils/auth'
 
 export default defineEventHandler(async (event) => {
   if (event.method !== 'POST') {
@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Vérifier que le refresh token est valide et stocké
-    if (!(await UserService.isValidRefreshToken(body.refreshToken))) {
+    if (!(await isValidRefreshToken(body.refreshToken))) {
       throw createError({
         statusCode: 401,
         statusMessage: 'Invalid refresh token',
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Vérifier le refresh token
-    const payload = AuthUtils.verifyRefreshToken(body.refreshToken)
+    const payload = verifyRefreshToken(body.refreshToken)
     if (!payload) {
       throw createError({
         statusCode: 401,
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Get the user
-    const user = await UserService.findUserById(payload.userId)
+    const user = await findUserById(payload.userId)
     if (!user) {
       throw createError({
         statusCode: 404,
@@ -48,14 +48,14 @@ export default defineEventHandler(async (event) => {
     }
 
     // Supprimer l'ancien refresh token
-    await UserService.removeRefreshToken(body.refreshToken)
+    await removeRefreshToken(body.refreshToken)
 
-    // Générer de nouveaux tokens
-    const newAccessToken = AuthUtils.generateAccessToken(user)
-    const newRefreshToken = AuthUtils.generateRefreshToken(user)
+    // Generate new tokens
+    const newAccessToken = generateAccessToken(user)
+    const newRefreshToken = generateRefreshToken(user)
 
-    // Stocker le nouveau refresh token
-    await UserService.addRefreshToken(newRefreshToken)
+    // Store new refresh token
+    await addRefreshToken(newRefreshToken)
 
     const response: AuthTokens = {
       accessToken: newAccessToken,
@@ -64,8 +64,8 @@ export default defineEventHandler(async (event) => {
 
     return response
   }
-  catch (error: any) {
-    if (error.statusCode) {
+  catch (error: unknown) {
+    if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error
     }
 

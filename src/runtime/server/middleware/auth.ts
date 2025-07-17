@@ -1,6 +1,6 @@
 import { defineEventHandler, getHeader, createError } from 'h3'
-import { AuthUtils } from '../utils/auth'
-import { UserService } from '../services/user'
+import { extractTokenFromHeader, verifyToken } from '../utils/auth'
+import { findUserById } from '../services/user'
 
 export default defineEventHandler(async (event) => {
   // Appliquer seulement aux routes protégées (commence par /api/protected/)
@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
   try {
     // Extraire le token de l'en-tête Authorization
     const authHeader = getHeader(event, 'authorization')
-    const token = AuthUtils.extractTokenFromHeader(authHeader)
+    const token = extractTokenFromHeader(authHeader)
 
     if (!token) {
       throw createError({
@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Vérifier le token
-    const payload = AuthUtils.verifyToken(token)
+    const payload = verifyToken(token)
     if (!payload) {
       throw createError({
         statusCode: 401,
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Verify that the user still exists
-    const user = await UserService.findUserById(payload.userId)
+    const user = await findUserById(payload.userId)
     if (!user) {
       throw createError({
         statusCode: 401,
@@ -42,8 +42,8 @@ export default defineEventHandler(async (event) => {
     event.context.user = user
     event.context.userId = user.id
   }
-  catch (error: any) {
-    if (error.statusCode) {
+  catch (error: unknown) {
+    if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error
     }
 

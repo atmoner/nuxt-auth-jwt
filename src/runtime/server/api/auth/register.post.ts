@@ -1,7 +1,7 @@
 import { defineEventHandler, readBody, createError } from 'h3'
 import type { RegisterCredentials, AuthResponse } from '../../../types/auth'
-import { UserService } from '../../services/user'
-import { AuthUtils } from '../../utils/auth'
+import { createUser, addRefreshToken } from '../../services/user'
+import { generateAccessToken, generateRefreshToken } from '../../utils/auth'
 
 export default defineEventHandler(async (event) => {
   if (event.method !== 'POST') {
@@ -48,14 +48,14 @@ export default defineEventHandler(async (event) => {
     }
 
     // Create the user
-    const user = await UserService.createUser(body)
+    const user = await createUser(body)
 
-    // Générer les tokens
-    const accessToken = AuthUtils.generateAccessToken(user)
-    const refreshToken = AuthUtils.generateRefreshToken(user)
+    // Generate tokens
+    const accessToken = generateAccessToken(user)
+    const refreshToken = generateRefreshToken(user)
 
-    // Stocker le refresh token
-    await UserService.addRefreshToken(refreshToken)
+    // Store refresh token
+    await addRefreshToken(refreshToken)
 
     const response: AuthResponse = {
       user,
@@ -67,12 +67,12 @@ export default defineEventHandler(async (event) => {
 
     return response
   }
-  catch (error: any) {
-    if (error.statusCode) {
+  catch (error: unknown) {
+    if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error
     }
 
-    if (error.message === 'User already exists with this email or username') {
+    if (error instanceof Error && error.message === 'User already exists with this email or username') {
       throw createError({
         statusCode: 409,
         statusMessage: error.message,

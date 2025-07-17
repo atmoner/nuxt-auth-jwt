@@ -2,12 +2,20 @@
   <div
     :class="[
       'flex items-start space-x-3 px-6 py-4 rounded-r-lg shadow-sm',
-      alertClasses
+      alertClasses,
     ]"
   >
-    <component :is="iconComponent" class="w-5 h-5 flex-shrink-0 mt-0.5" />
+    <component
+      :is="iconComponent"
+      class="w-5 h-5 flex-shrink-0 mt-0.5"
+    />
     <div>
-      <h4 v-if="title" class="font-semibold">{{ title }}</h4>
+      <h4
+        v-if="title"
+        class="font-semibold"
+      >
+        {{ title }}
+      </h4>
       <p>
         <slot />
       </p>
@@ -20,12 +28,12 @@ const props = defineProps({
   type: {
     type: String,
     default: 'info',
-    validator: (value) => ['success', 'error', 'warning', 'info'].includes(value)
+    validator: value => ['success', 'error', 'warning', 'info'].includes(value),
   },
   title: {
     type: String,
-    default: ''
-  }
+    default: '',
+  },
 })
 
 const alertClasses = computed(() => {

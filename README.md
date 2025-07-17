@@ -470,7 +470,38 @@ Contributions are welcome! Please read our contributing guidelines:
 
 </details>
 
-## 📄 License
+## � Publishing & Deployment
+
+This module uses automated GitHub Actions workflows for testing and publishing.
+
+### Automated Publishing
+
+The package is automatically published to NPM when you create a new git tag:
+
+```bash
+# Update version and create tag
+npm version patch  # or minor/major
+git push origin main --tags
+```
+
+### Manual Publishing
+
+You can also manually trigger publishing from GitHub Actions:
+
+1. Go to the "Actions" tab in the GitHub repository
+2. Select "Publish to NPM" workflow  
+3. Click "Run workflow"
+
+For detailed publishing instructions, see [PUBLISHING.md](PUBLISHING.md).
+
+### CI/CD Pipeline
+
+- ✅ **Continuous Integration**: Tests run on Node.js 18, 20, and 22
+- ✅ **Automated Testing**: Linting, tests, and type checking
+- ✅ **Automated Publishing**: NPM publication on git tags
+- ✅ **GitHub Releases**: Automatic release creation
+
+## �📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 

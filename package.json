@@ -1,6 +1,6 @@
 {
   "name": "nuxt-auth-jwt",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A complete authentication module for Nuxt with persistent database support via LowDB.",
   "repository": "atmoner/nuxt-auth-jwt",
   "license": "MIT",

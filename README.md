@@ -2,8 +2,6 @@
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
-[![License][license-src]][license-href]
-[![Nuxt][nuxt-src]][nuxt-href]
 
 A complete authentication module for Nuxt 4 with JWT tokens and persistent database support via LowDB.
 
@@ -23,6 +21,16 @@ A complete authentication module for Nuxt 4 with JWT tokens and persistent datab
 Install the module to your Nuxt application:
 
 ```bash
+npx nuxi module add @cosmdev/nuxt-auth-jwt
+```
+
+That's it! You can now use Nuxt offlinesigners Module in your Nuxt app ✨
+
+## Manual Setup
+
+Install the module to your Nuxt application:
+
+```bash
 npm install nuxt-auth-jwt
 ```
 
@@ -36,7 +44,7 @@ export default defineNuxtConfig({
 })
 ```
 
-That's it! The module will automatically set up all authentication routes and middleware.
+That's it! The module will automatically set up all authentication routes and middleware. ✨
 
 ## 🗄️ Database
 
@@ -470,7 +478,7 @@ Contributions are welcome! Please read our contributing guidelines:
 
 </details>
 
-## � Publishing & Deployment
+## Publishing & Deployment
 
 This module uses automated GitHub Actions workflows for testing and publishing.
 
@@ -521,9 +529,3 @@ Built with ❤️ using:
 
 [npm-downloads-src]: https://img.shields.io/npm/dm/nuxt-auth-jwt.svg?style=flat&colorA=020420&colorB=00DC82
 [npm-downloads-href]: https://npm.chart.dev/nuxt-auth-jwt
-
-[license-src]: https://img.shields.io/npm/l/nuxt-auth-jwt.svg?style=flat&colorA=020420&colorB=00DC82
-[license-href]: https://npmjs.com/package/nuxt-auth-jwt
-
-[nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt.js
-[nuxt-href]: https://nuxt.com

@@ -85,6 +85,7 @@ To switch to PostgreSQL, MySQL, etc., simply modify the `src/runtime/server/db/d
 ### Basic Authentication
 
 The module provides a simple authentication API through the `useAuth()` composable:
+1. Create app.vue
 
 ```vue
 <template>
@@ -110,6 +111,7 @@ const logout = async () => {
 ```
 
 ### Login Component
+2. Create ./components/LoginForm.vue
 
 ```vue
 <template>

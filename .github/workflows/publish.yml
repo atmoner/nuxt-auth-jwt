@@ -1,16 +1,5 @@
 name: Publish to NPM
 
-on:
-  push:
-    tags:
-      - 'v*'
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to publish (leave empty for current package.json version)'
-        required: false
-        type: string
-
 jobs:
   test:
     runs-on: ubuntu-latest

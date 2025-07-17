@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
   app: {
-    baseURL: '/nuxt-auth-jwt/',
+    baseURL: process.env.NODE_ENV === "production" ? "/nuxt-auth-jwt/" : "/",
   },
   modules: ['../src/module', '@nuxt/ui'],
   devtools: { enabled: true },

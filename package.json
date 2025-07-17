@@ -23,9 +23,9 @@
     "dist"
   ],
   "scripts": {
-    "prepack": "nuxt-module-build build --preset github_pages",
+    "prepack": "nuxt-module-build build",
     "dev": "npm run dev:prepare && nuxi dev playground",
-    "dev:build": "nuxi build playground",
+    "dev:build": "nuxi build playground --preset github_pages",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
     "release": "npm run lint && npm run test && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
     "lint": "eslint .",

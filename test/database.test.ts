@@ -1,5 +1,13 @@
 import { describe, it, expect } from 'vitest'
-import { UserService } from '../src/runtime/server/services/user'
+import { 
+  createUser, 
+  findUserByEmail, 
+  verifyCredentials, 
+  getAllUsers, 
+  addRefreshToken, 
+  removeRefreshToken, 
+  isValidRefreshToken 
+} from '../src/runtime/server/services/user'
 
 describe('UserService with LowDB', () => {
   it('should create a user and persist it to database', async () => {
@@ -9,7 +17,7 @@ describe('UserService with LowDB', () => {
       password: 'password123',
     }
 
-    const user = await UserService.createUser(credentials)
+    const user = await createUser(credentials)
 
     expect(user).toBeDefined()
     expect(user.email).toBe(credentials.email)
@@ -22,7 +30,7 @@ describe('UserService with LowDB', () => {
   })
 
   it('should find user by email', async () => {
-    const user = await UserService.findUserByEmail('test@example.com')
+    const user = await findUserByEmail('test@example.com')
 
     expect(user).toBeDefined()
     expect(user?.email).toBe('test@example.com')
@@ -32,7 +40,7 @@ describe('UserService with LowDB', () => {
   })
 
   it('should verify credentials', async () => {
-    const user = await UserService.verifyCredentials('test@example.com', 'password123')
+    const user = await verifyCredentials('test@example.com', 'password123')
 
     expect(user).toBeDefined()
     expect(user?.email).toBe('test@example.com')
@@ -41,7 +49,7 @@ describe('UserService with LowDB', () => {
   })
 
   it('should get all users', async () => {
-    const users = await UserService.getAllUsers()
+    const users = await getAllUsers()
 
     expect(users).toBeDefined()
     expect(Array.isArray(users)).toBe(true)
@@ -57,17 +65,17 @@ describe('UserService with LowDB', () => {
     const token = 'test-refresh-token-123'
 
     // Add a token
-    await UserService.addRefreshToken(token)
+    await addRefreshToken(token)
 
     // Verify it is valid
-    const isValid = await UserService.isValidRefreshToken(token)
+    const isValid = await isValidRefreshToken(token)
     expect(isValid).toBe(true)
 
     // Remove the token
-    await UserService.removeRefreshToken(token)
+    await removeRefreshToken(token)
 
     // Verify it is no longer valid
-    const isStillValid = await UserService.isValidRefreshToken(token)
+    const isStillValid = await isValidRefreshToken(token)
     expect(isStillValid).toBe(false)
   })
 })

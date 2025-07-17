@@ -21,7 +21,7 @@ A complete authentication module for Nuxt 4 with JWT tokens and persistent datab
 Install the module to your Nuxt application:
 
 ```bash
-npx nuxi module add @cosmdev/nuxt-auth-jwt
+npx nuxi module add nuxt-auth-jwt
 ```
 
 That's it! You can now use Nuxt offlinesigners Module in your Nuxt app ✨

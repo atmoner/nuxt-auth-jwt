@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest'
-import { 
-  createUser, 
-  findUserByEmail, 
-  verifyCredentials, 
-  getAllUsers, 
-  addRefreshToken, 
-  removeRefreshToken, 
-  isValidRefreshToken 
+import {
+  createUser,
+  findUserByEmail,
+  verifyCredentials,
+  getAllUsers,
+  addRefreshToken,
+  removeRefreshToken,
+  isValidRefreshToken,
 } from '../src/runtime/server/services/user'
 
 describe('UserService with LowDB', () => {
